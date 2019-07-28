@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Board from "components/Board";
 import { hot } from "react-hot-loader/root";
+import { createUseStyles } from "react-jss";
 
 const onChange = (
   event: any,
@@ -106,14 +107,40 @@ export const updateGameState = (
   setPlayerTurn(playerTurn === "X" ? "O" : "X");
 };
 
+const useStyles = createUseStyles({
+  root: {
+    margin: "0 auto",
+    width: "max-content",
+    display: "grid",
+    gridTemplateAreas: `
+      "label  label  label"
+      "header header header"
+      "...... board  ....."
+    `,
+    gridTemplateColumns: "auto auto auto"
+  },
+  label: {
+    gridArea: "label",
+    justifySelf: "center"
+  },
+  header: {
+    gridArea: "header",
+    justifySelf: "center"
+  },
+  board: {
+    gridArea: "board"
+  }
+});
+
 const App: React.FC = () => {
+  const classes = useStyles();
   const [boardSize, setBoardSize] = useState(3);
   const [gameState, setGameState] = useState(constructGameState(boardSize));
   const [playerTurn, setPlayerTurn] = useState("X");
   const gameOver = checkWinConditions(gameState);
   return (
-    <div>
-      <label htmlFor="boardSizeInput">
+    <div className={classes.root}>
+      <label htmlFor="boardSizeInput" className={classes.label}>
         Change board size:{" "}
         <input
           onChange={e =>
@@ -124,9 +151,12 @@ const App: React.FC = () => {
         />
       </label>
       {gameOver && (
-        <h1>{`Player ${playerTurn === "X" ? "O" : "X"} has won!`}</h1>
+        <h1 className={classes.header}>{`Player ${
+          playerTurn === "X" ? "O" : "X"
+        } has won!`}</h1>
       )}
       <Board
+        className={classes.board}
         gameOver={gameOver}
         boardSize={boardSize}
         gameState={gameState}

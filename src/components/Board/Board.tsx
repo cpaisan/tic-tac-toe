@@ -16,6 +16,7 @@ interface BoardProps {
   gameState: any;
   updateGameState: any;
   gameOver: boolean;
+  className: string;
 }
 
 export const constructBoard = (
@@ -41,10 +42,16 @@ export const constructBoard = (
   );
 
 const Board: React.FC<BoardProps> = props => {
-  const { boardSize = 3, gameState, updateGameState, gameOver } = props;
+  const {
+    boardSize = 3,
+    gameState,
+    updateGameState,
+    gameOver,
+    className
+  } = props;
   const classes = useStyles({ boardSize });
   const board = constructBoard(gameState, updateGameState, gameOver);
-  return <div className={classes.root}>{board}</div>;
+  return <div className={[className, classes.root].join(" ")}>{board}</div>;
 };
 
 Board.defaultProps = {
