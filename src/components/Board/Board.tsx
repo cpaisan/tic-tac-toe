@@ -6,8 +6,7 @@ const useStyles = createUseStyles({
   root: ({ boardSize }: { boardSize: number }) => ({
     display: "grid",
     gridTemplateRows: `repeat(${boardSize}, max-content)`,
-    gridTemplateColumns: `repeat(${boardSize}, max-content)`,
-    maxWidth: "60%"
+    gridTemplateColumns: `repeat(${boardSize}, max-content)`
   })
 });
 

@@ -113,11 +113,14 @@ const useStyles = createUseStyles({
     width: "max-content",
     display: "grid",
     gridTemplateAreas: `
-      "label  label  label"
+      "label  label  resetButton"
       "header header header"
       "...... board  ....."
     `,
-    gridTemplateColumns: "auto auto auto"
+    gridTemplateColumns: "80px auto 80px",
+    gridColumnGap: "10px",
+    gridRowGap: "10px",
+    padding: "30px"
   },
   label: {
     gridArea: "label",
@@ -128,7 +131,11 @@ const useStyles = createUseStyles({
     justifySelf: "center"
   },
   board: {
-    gridArea: "board"
+    gridArea: "board",
+    justifySelf: "center"
+  },
+  resetButton: {
+    gridArea: "resetButton"
   }
 });
 
@@ -150,6 +157,12 @@ const App: React.FC = () => {
           name="boardSizeInput"
         />
       </label>
+      <button
+        onClick={() => setGameState(constructGameState(boardSize))}
+        className={classes.resetButton}
+      >
+        Reset board
+      </button>
       {gameOver && (
         <h1 className={classes.header}>{`Player ${
           playerTurn === "X" ? "O" : "X"
