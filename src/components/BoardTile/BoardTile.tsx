@@ -4,6 +4,7 @@ import { createUseStyles } from "react-jss";
 interface BoardTileProps {
   value?: string;
   onClick?: any;
+  gameOver: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -14,10 +15,14 @@ const useStyles = createUseStyles({
 });
 
 const BoardTile: React.FC<BoardTileProps> = props => {
-  const { value = "", onClick } = props;
+  const { value = "", onClick, gameOver } = props;
   const classes = useStyles();
   return (
-    <button className={classes.root} onClick={onClick} disabled={!!value}>
+    <button
+      className={classes.root}
+      onClick={onClick}
+      disabled={!!value || gameOver}
+    >
       {value}
     </button>
   );

@@ -15,11 +15,13 @@ interface BoardProps {
   boardSize?: number;
   gameState: any;
   updateGameState: any;
+  gameOver: boolean;
 }
 
 export const constructBoard = (
   gameState: Array<Array<string>>,
-  updateGameState: any
+  updateGameState: any,
+  gameOver: boolean
 ): Array<Array<JSX.Element>> =>
   gameState.map(
     (row, rowIndex): Array<JSX.Element> => {
@@ -30,6 +32,7 @@ export const constructBoard = (
             key={column}
             value={row[column]}
             onClick={() => updateGameState(rowIndex, column)}
+            gameOver={gameOver}
           />
         );
       }
@@ -38,9 +41,9 @@ export const constructBoard = (
   );
 
 const Board: React.FC<BoardProps> = props => {
-  const { boardSize = 3, gameState, updateGameState } = props;
+  const { boardSize = 3, gameState, updateGameState, gameOver } = props;
   const classes = useStyles({ boardSize });
-  const board = constructBoard(gameState, updateGameState);
+  const board = constructBoard(gameState, updateGameState, gameOver);
   return <div className={classes.root}>{board}</div>;
 };
 
