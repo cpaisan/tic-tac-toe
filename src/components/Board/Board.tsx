@@ -1,34 +1,46 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
+import BoardTile from "components/BoardTile";
 
 const useStyles = createUseStyles({
   root: ({ boardSize }: { boardSize: number }) => ({
     display: "grid",
-    gridTemplateRows: `repeat(${boardSize}, 1fr)`,
-    gridTemplateColumns: `repeat(${boardSize}, 1fr)`,
+    gridTemplateRows: `repeat(${boardSize}, max-content)`,
+    gridTemplateColumns: `repeat(${boardSize}, max-content)`,
     maxWidth: "60%"
   })
 });
 
 interface BoardProps {
   boardSize?: number;
+  gameState: any;
+  updateGameState: any;
 }
 
-export const constructBoard = (boardSize: number): Array<Array<JSX.Element>> =>
-  [...Array(boardSize)].map(
-    (): Array<JSX.Element> => {
+export const constructBoard = (
+  gameState: Array<Array<string>>,
+  updateGameState: any
+): Array<Array<JSX.Element>> =>
+  gameState.map(
+    (row, rowIndex): Array<JSX.Element> => {
       const boardRow = [];
-      for (let x = 0; x < boardSize; x++) {
-        boardRow.push(<button key={x}>{x}</button>);
+      for (let column = 0; column < gameState.length; column++) {
+        boardRow.push(
+          <BoardTile
+            key={column}
+            value={row[column]}
+            onClick={() => updateGameState(rowIndex, column)}
+          />
+        );
       }
       return boardRow;
     }
   );
 
 const Board: React.FC<BoardProps> = props => {
-  const { boardSize = 3 } = props;
+  const { boardSize = 3, gameState, updateGameState } = props;
   const classes = useStyles({ boardSize });
-  const board = constructBoard(boardSize);
+  const board = constructBoard(gameState, updateGameState);
   return <div className={classes.root}>{board}</div>;
 };
 
