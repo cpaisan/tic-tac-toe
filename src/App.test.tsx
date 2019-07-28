@@ -3,7 +3,14 @@ import ReactDOM from "react-dom";
 import { configure, shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-import App, { constructGameState, updateGameState } from "./App";
+import App, {
+  constructGameState,
+  updateGameState,
+  checkRowWin,
+  checkColumnWin,
+  checkWinConditions,
+  checkDiagonalWin
+} from "./App";
 import Board from "components/Board";
 import BoardTile from "components/BoardTile";
 
@@ -23,6 +30,50 @@ describe("App", () => {
     wrapper.find("input").simulate("change", { target: { value: 8 } });
     expect(wrapper.find(Board).props().boardSize).toEqual(8);
     expect(wrapper.find(Board).find("button").length).toEqual(64);
+  });
+
+  it("should return true when there is a winning row", () => {
+    const winningRow = ["X", "X", "X"];
+    const nonWinningRow = ["X", "O", "X"];
+    expect(checkRowWin(winningRow)).toEqual(true);
+    expect(checkRowWin(nonWinningRow)).toEqual(false);
+  });
+
+  it("should return true when there is a winning column", () => {
+    const winningGameState = [["X", "X", "X"], ["X", "O", "X"], ["X", "X", ""]];
+    const nonWinningGameState = [
+      ["", "X", "X"],
+      ["X", "O", "X"],
+      ["O", "X", ""]
+    ];
+    expect(checkColumnWin(winningGameState)).toEqual(true);
+    expect(checkColumnWin(nonWinningGameState)).toEqual(false);
+  });
+
+  it("should evaluate when there is a winning diagonal condition", () => {
+    const winningGameState = [
+      ["O", "X", "X"],
+      ["X", "O", "X"],
+      ["O", "X", "O"]
+    ];
+    const nonWinningGameState = [
+      ["", "X", "O"],
+      ["X", "X", "X"],
+      ["X", "X", ""]
+    ];
+    expect(checkDiagonalWin(winningGameState)).toEqual(true);
+    expect(checkDiagonalWin(nonWinningGameState)).toEqual(false);
+  });
+
+  it("should evaluate a winning and non-winning game state", () => {
+    const winningGameState = [["X", "X", "X"], ["X", "O", "X"], ["X", "X", ""]];
+    const nonWinningGameState = [
+      ["", "X", "X"],
+      ["X", "O", "X"],
+      ["O", "X", ""]
+    ];
+    expect(checkWinConditions(winningGameState)).toEqual(true);
+    expect(checkWinConditions(nonWinningGameState)).toEqual(false);
   });
 
   it("should switch players' turns after making a move", () => {
